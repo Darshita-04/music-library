@@ -30,8 +30,13 @@ const library = {
 // prints a list of all playlists, in the form:
 // p01: Coding Music - 2 tracks
 // p02: Other Playlist - 1 tracks
-const printPlaylists = function() {
-
+const printPlaylists = function() {       
+       for(let playlist in library.playlists) {
+              const playlistId =  library.playlists[playlist];     
+              const playlistName = playlistId.name;     
+              const noOfTracks = playlistId.tracks.length;     
+              console.log(`${playlistId}: ${playlistName} ${noOfTracks} tracks`);
+       }
 }
 
 
@@ -39,8 +44,14 @@ const printPlaylists = function() {
 // t01: Code Monkey by Jonathan Coulton (Thing a Week Three)
 // t02: Model View Controller by James Dempsey (WWDC 2003)
 // t03: Four Thirty-Three by John Cage (Woodstock 1952)
-const printTracks = function() {
-
+const printTracks = function() {    
+       for(let track in library.tracks) {
+              const trackId = library.tracks[track];
+              const trackName = trackId.name;
+              const artistName = trackId.artist;
+              const albumName = trackId.album;
+             console.log(`${trackId}: ${trackName} by ${artistName} (${albumName})`);
+       }
 }
 
 
@@ -49,13 +60,30 @@ const printTracks = function() {
 // t01: Code Monkey by Jonathan Coulton (Thing a Week Three)
 // t02: Model View Controller by James Dempsey (WWDC 2003)
 const printPlaylist = function(playlistId) {
-
+       for(let playlist in library.playlists) {
+              const playlistID = library.playlists[playlist];    
+              const playlistName = playlistID.name;  
+              const noOfTracks = playlistID.tracks.length; 
+              const trackList = playlistID.tracks;
+              if(playlistId === playlistID){
+                     console.log(`${playlistId}: ${playlistName} ${noOfTracks} tracks`);
+                     for(let i = 0; i < noOfTracks; i++) {
+                            const trackId = trackList[i];
+                            const trackName = library.tracks[trackList[i]].name;
+                            const artistName = library.tracks[trackList[i]].artist;
+                            const albumName = library.tracks[trackList[i]].album;
+                            console.log(`${trackId}: ${trackName} by ${artistName} (${albumName})`);
+                     }
+              }        
+       }
 }
 
 
 // adds an existing track to an existing playlist
 const addTrackToPlaylist = function(trackId, playlistId) {
-
+       const existingPlaylist = library.playlists[playlistId].tracks;
+       existingPlaylist.push(trackId)
+       console.log(existingPlaylist)
 }
 
 
@@ -65,16 +93,31 @@ const generateUid = function() {
   return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
 }
 
-
 // adds a track to the library
-const addTrack = function(name, artist, album) {
-
+const addTrack = function(name, artist, albumm) {
+       // using generateUid() to create unique track id
+       const trackId = generateUid();
+       const newTrack = {
+              id:trackId,
+              name:name,
+              artist:artist,
+              albumm:albumm
+       }
+       library.tracks[trackId] = newTrack;
+      console.log(library.tracks);
 }
-
 
 // adds a playlist to the library
 const addPlaylist = function(name) {
-
+       // using generateUid() to create unique playlist id
+       const playlistId = generateUid();
+       const newPlaylist = {
+              id:playlistId,
+              name:name,
+              tracks:[]
+       }
+       library.playlists[playlistId] = newPlaylist;
+      console.log(library.playlists);
 }
 
 
@@ -85,4 +128,27 @@ const addPlaylist = function(name) {
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/search
 const printSearchResults = function(query) {
 
+       for(let track in library.tracks){
+              // const trackId =  library.tracks[track];
+              // const trackName = trackId.name;
+              // const artistName = trackId.artist;
+              // const albumName = trackId.album;
+              // console.log(albumName.search(query))
+       }
+
+
 }
+
+printPlaylists(library);
+console.log("======================================");
+printTracks(library);
+console.log("======================================");
+printPlaylist('p02',library);
+console.log("======================================");
+addTrackToPlaylist('t01','p02',library);
+console.log("======================================");
+addTrack('LIFETIMES', 'Kety Perry', 'LIFETIMES');
+console.log("======================================");
+addPlaylist('Relaxing Music');
+console.log("======================================");
+printSearchResults('Three')
